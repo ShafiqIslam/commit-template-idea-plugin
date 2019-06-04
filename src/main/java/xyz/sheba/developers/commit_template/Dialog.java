@@ -6,13 +6,13 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-public class CommitDialog extends DialogWrapper {
+public class Dialog extends DialogWrapper {
 
-    private final CommitPanel panel;
+    private final Panel panel;
 
-    CommitDialog(@Nullable Project project) {
+    Dialog(@Nullable Project project) {
         super(project);
-        panel = new CommitPanel(project);
+        panel = new Panel(project);
         setTitle("Commit");
         setOKButtonText("OK");
         init();
@@ -24,7 +24,7 @@ public class CommitDialog extends DialogWrapper {
         return panel.getMainPanel();
     }
 
-    CommitMessage getCommitMessage() {
+    Message getCommitMessage() {
         return panel.getCommitMessage();
     }
 

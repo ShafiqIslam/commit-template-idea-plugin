@@ -10,19 +10,16 @@ import com.intellij.openapi.vcs.ui.Refreshable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * @author Damien Arrachequesne
- */
-public class CreateCommitAction extends AnAction implements DumbAware {
+public class Action extends AnAction implements DumbAware {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent actionEvent) {
         final CommitMessageI commitPanel = getCommitPanel(actionEvent);
-        if (commitPanel == null)
-            return;
+        if (commitPanel == null) return;
 
-        CommitDialog dialog = new CommitDialog(actionEvent.getProject());
+        Dialog dialog = new Dialog(actionEvent.getProject());
         dialog.show();
+
         if (dialog.getExitCode() == DialogWrapper.OK_EXIT_CODE) {
             commitPanel.setCommitMessage(dialog.getCommitMessage().toString());
         }
