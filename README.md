@@ -1,6 +1,6 @@
 # Git commit template Plugin for IntelliJ
 
-forked from [MobileTribe/commit-template-idea-plugin](https://github.com/MobileTribe/commit-template-idea-plugin) to suit [my taste](https://github.com/ShafiqIslam/dotfiles/blob/master/.gitmessage).
+Inspired from [MobileTribe/commit-template-idea-plugin](https://github.com/MobileTribe/commit-template-idea-plugin) to suit [my taste](https://github.com/ShafiqIslam/dotfiles/blob/master/.gitmessage).
 
 ## Installation
 
