@@ -17,7 +17,12 @@ public class Action extends AnAction implements DumbAware {
         final CommitMessageI commitPanel = getCommitPanel(actionEvent);
         if (commitPanel == null) return;
 
-        Dialog dialog = new Dialog(actionEvent.getProject());
+        Dialog dialog = null;
+        try {
+            dialog = new Dialog(actionEvent.getProject());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         dialog.show();
 
         if (dialog.getExitCode() == DialogWrapper.OK_EXIT_CODE) {

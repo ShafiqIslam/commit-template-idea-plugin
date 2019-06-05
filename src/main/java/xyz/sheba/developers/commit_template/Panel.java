@@ -1,9 +1,14 @@
 package xyz.sheba.developers.commit_template;
 
+import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ModuleRootManager;
 import org.jetbrains.annotations.NotNull;
+import org.json.simple.parser.ParseException;
+import xyz.sheba.developers.commit_template.dto.CZRC;
 
 import javax.swing.*;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Panel {
@@ -17,7 +22,8 @@ public class Panel {
     private JTextField coAuthors;
     private JTextField references;
 
-    Panel(Project project) {
+    Panel(Project project) throws IOException, ParseException {
+        CZRC czrc = CZRC.load(project.getBasePath());
         for (ChangeType type : ChangeType.values()) {
             types.addItem(type);
         }
