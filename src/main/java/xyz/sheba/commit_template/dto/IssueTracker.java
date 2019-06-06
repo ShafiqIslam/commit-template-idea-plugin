@@ -1,4 +1,4 @@
-package xyz.sheba.developers.commit_template.dto;
+package xyz.sheba.commit_template.dto;
 
 public class IssueTracker {
     private String name;
@@ -8,6 +8,11 @@ public class IssueTracker {
     }
 
     public String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
         return name;
     }
 }

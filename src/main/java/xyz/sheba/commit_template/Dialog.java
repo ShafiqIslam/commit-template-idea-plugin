@@ -1,12 +1,10 @@
-package xyz.sheba.developers.commit_template;
+package xyz.sheba.commit_template;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import org.jetbrains.annotations.Nullable;
-import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
-import java.io.IOException;
 
 public class Dialog extends DialogWrapper {
 

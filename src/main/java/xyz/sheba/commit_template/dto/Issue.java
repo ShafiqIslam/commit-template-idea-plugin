@@ -1,4 +1,4 @@
-package xyz.sheba.developers.commit_template.dto;
+package xyz.sheba.commit_template.dto;
 
 public class Issue {
     private IssueTracker tracker;

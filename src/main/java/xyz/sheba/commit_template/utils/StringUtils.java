@@ -1,4 +1,4 @@
-package xyz.sheba.developers.commit_template.utils;
+package xyz.sheba.commit_template.utils;
 
 public class StringUtils {
     public static String padRight(String s, int n) {

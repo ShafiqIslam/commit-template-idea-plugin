@@ -1,13 +1,11 @@
-package xyz.sheba.developers.commit_template;
+package xyz.sheba.commit_template;
 
 import org.apache.commons.lang.WordUtils;
-import xyz.sheba.developers.commit_template.dto.Issue;
-import xyz.sheba.developers.commit_template.dto.Type;
-import xyz.sheba.developers.commit_template.dto.Author;
+import xyz.sheba.commit_template.dto.Issue;
+import xyz.sheba.commit_template.dto.Type;
+import xyz.sheba.commit_template.dto.Author;
 
 import java.util.ArrayList;
-
-import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 class Message {
     private static final int MAX_LINE_LENGTH = 72;
@@ -65,7 +63,9 @@ class Message {
 
     @Override
     public String toString() {
-        return this.format();
+        System.out.println(this.types.get(0).toString());
+        return this.types.get(0).toString();
+        //return this.format();
     }
 
     static class Builder {

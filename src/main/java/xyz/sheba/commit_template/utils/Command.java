@@ -1,8 +1,11 @@
-package xyz.sheba.developers.commit_template.utils;
+package xyz.sheba.commit_template.utils;
+
+import cucumber.api.java.hu.Ha;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -21,15 +24,18 @@ public class Command {
 
         private final int exitValue;
         private final List<String> output;
+        private final HashMap<String, Integer> outputHash;
 
         Result(int exitValue) {
             this.exitValue = exitValue;
             this.output = null;
+            this.outputHash = null;
         }
 
         Result(int exitValue, List<String> output) {
             this.exitValue = exitValue;
             this.output = output;
+            this.outputHash = getOutputHash();
         }
 
         public boolean isSuccess() {
@@ -38,6 +44,18 @@ public class Command {
 
         public List<String> getOutput() {
             return output;
+        }
+
+        private HashMap<String, Integer> getOutputHash() {
+            HashMap<String, Integer> outputHash = new HashMap<>();
+            for (int i = 0; i < output.size(); i++){
+                outputHash.put(output.get(i), i);
+            }
+            return outputHash;
+        }
+
+        public int compare(String s1, String s2) {
+            return outputHash.get(s1) - outputHash.get(s2);
         }
     }
 

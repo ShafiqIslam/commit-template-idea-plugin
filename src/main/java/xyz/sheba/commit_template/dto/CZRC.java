@@ -1,18 +1,10 @@
-package xyz.sheba.developers.commit_template.dto;
+package xyz.sheba.commit_template.dto;
 
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.io.File;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import xyz.sheba.developers.commit_template.utils.Command;
 
 public class CZRC {
-    private static CZRC czrc = null;
 
     private JSONObject source;
 
@@ -24,28 +16,6 @@ public class CZRC {
     private ArrayList<String> scopes;
     private int typesMaxNameLength = 0;
     private int typesMaxEmojiLength = 0;
-
-    public static CZRC load(String projectPath) throws IOException, ParseException {
-        if(czrc != null) return czrc;
-
-        JSONParser jsonParser = new JSONParser();
-        FileReader reader = new FileReader(System.getProperty("user.home") + "/.czrc.json");
-        JSONObject systemRc = (JSONObject) jsonParser.parse(reader);
-        try {
-            reader = new FileReader(projectPath + "/.czrc.json");
-            JSONObject localRc = (JSONObject) jsonParser.parse(reader);
-            systemRc.put("scopes", localRc.get("scopes"));
-        } catch (Exception e) {}
-
-        czrc = new CZRC(systemRc);
-        return czrc;
-    }
-
-    public static CZRC get() throws Exception {
-        if(czrc != null) return czrc;
-
-        throw new Exception("Czrc is not loaded.");
-    }
 
     public int getSubjectMaxLength() {
         return subjectMaxLength;
@@ -71,14 +41,6 @@ public class CZRC {
         return scopes;
     }
 
-    public ArrayList<String> getScopesSortedByRecentUsage(File workingDirectory) {
-        return scopes;
-        /*Command.Result result = new Command(workingDirectory, "git log --all --format=%s | grep -Eo '^[a-z]+(\\(.*\\)):.*$' | sed 's/^.*(\\(.*\\)):.*$/\\1/' | sort -n | uniq").execute();
-        if (result.isSuccess()) {
-            return scopes;
-        }*/
-    }
-
     public int getTypesMaxNameLength() {
         return typesMaxNameLength;
     }
@@ -87,7 +49,7 @@ public class CZRC {
         return typesMaxEmojiLength;
     }
 
-    private CZRC(JSONObject source) {
+    public CZRC(JSONObject source) {
         this.source = source;
         this.setBodyMaxLength().setSubjectMaxLength().setTypes()
                 .setAuthors().setIssueTrackers().setScopes()
