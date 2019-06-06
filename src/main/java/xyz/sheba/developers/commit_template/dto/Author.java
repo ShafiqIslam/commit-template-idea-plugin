@@ -1,6 +1,10 @@
 package xyz.sheba.developers.commit_template.dto;
 
-public class Author {
+import xyz.sheba.developers.commit_template.form.AuthorComboItem;
+import xyz.sheba.developers.commit_template.form.ComboItem;
+import xyz.sheba.developers.commit_template.form.HasComboItem;
+
+public class Author implements HasComboItem {
     private String name;
     private String email;
 
@@ -15,6 +19,11 @@ public class Author {
 
     public String getEmail() {
         return email;
+    }
+
+    @Override
+    public ComboItem getComboItem() {
+        return new AuthorComboItem(this, name);
     }
 
     @Override

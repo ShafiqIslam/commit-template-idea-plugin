@@ -12,7 +12,7 @@ public class Dialog extends DialogWrapper {
 
     private final Panel panel;
 
-    Dialog(@Nullable Project project) throws IOException, ParseException {
+    Dialog(@Nullable Project project) throws Exception {
         super(project);
         panel = new Panel(project);
         setTitle("Commit");
@@ -29,5 +29,4 @@ public class Dialog extends DialogWrapper {
     Message getCommitMessage() {
         return panel.getCommitMessage();
     }
-
 }

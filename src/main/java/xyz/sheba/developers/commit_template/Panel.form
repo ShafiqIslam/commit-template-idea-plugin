@@ -41,7 +41,9 @@
       </component>
       <component id="a5d3c" class="javax.swing.JLabel">
         <constraints>
-          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="28" height="185"/>
+          </grid>
         </constraints>
         <properties>
           <text value="What"/>
@@ -50,19 +52,11 @@
       <component id="32600" class="javax.swing.JTextArea" binding="what">
         <constraints>
           <grid row="4" column="1" row-span="1" col-span="2" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="50"/>
+            <preferred-size width="150" height="185"/>
           </grid>
         </constraints>
         <properties>
           <lineWrap value="true"/>
-        </properties>
-      </component>
-      <component id="83b17" class="javax.swing.JLabel">
-        <constraints>
-          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="4" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Issues"/>
         </properties>
       </component>
       <component id="424ce" class="javax.swing.JComboBox" binding="types">
@@ -72,14 +66,6 @@
         <properties>
           <model/>
         </properties>
-      </component>
-      <component id="73448" class="javax.swing.JTextField" binding="issues">
-        <constraints>
-          <grid row="5" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-        </constraints>
-        <properties/>
       </component>
       <component id="f7646" class="javax.swing.JLabel">
         <constraints>
@@ -148,13 +134,29 @@
           <text value="Co Authors"/>
         </properties>
       </component>
-      <component id="ceee5" class="javax.swing.JTextField" binding="coAuthors">
+      <component id="a6755" class="javax.swing.JLabel">
         <constraints>
-          <grid row="7" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="27"/>
-          </grid>
+          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
-        <properties/>
+        <properties>
+          <text value="Issues"/>
+        </properties>
+      </component>
+      <component id="11089" class="javax.swing.JComboBox" binding="issues">
+        <constraints>
+          <grid row="5" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <model/>
+        </properties>
+      </component>
+      <component id="cf177" class="javax.swing.JComboBox" binding="coAuthors">
+        <constraints>
+          <grid row="7" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <model/>
+        </properties>
       </component>
     </children>
   </grid>

@@ -1,14 +1,13 @@
 package xyz.sheba.developers.commit_template;
 
-import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.vfs.VfsUtil;
 import org.jetbrains.annotations.NotNull;
-import org.json.simple.parser.ParseException;
-import xyz.sheba.developers.commit_template.dto.CZRC;
+import xyz.sheba.developers.commit_template.dto.*;
+import xyz.sheba.developers.commit_template.form.AuthorComboItem;
+import xyz.sheba.developers.commit_template.form.TypeComboItem;
 
 import javax.swing.*;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class Panel {
@@ -18,20 +17,22 @@ public class Panel {
     private JComboBox scopes;
     private JTextArea what;
     private JTextArea why;
-    private JTextField issues;
-    private JTextField coAuthors;
+    private JComboBox issues;
+    private JComboBox coAuthors;
     private JTextField references;
 
-    Panel(Project project) throws IOException, ParseException {
+    Panel(Project project) throws Exception {
         CZRC czrc = CZRC.load(project.getBasePath());
-        for (ChangeType type : ChangeType.values()) {
-            types.addItem(type);
+
+        for (Type type : czrc.getTypes()) {
+            types.addItem(type.getComboItem());
         }
-        /*File workingDirectory = VfsUtil.virtualToIoFile(project.getBaseDir());
-        Command.Result result = new Command(workingDirectory, "git log --all --format=%s | grep -Eo '^[a-z]+(\\(.*\\)):.*$' | sed 's/^.*(\\(.*\\)):.*$/\\1/' | sort -n | uniq").execute();
-        if (result.isSuccess()) {
-            result.getOutput().forEach(scopes::addItem);
-        }*/
+        for (Author author : czrc.getAuthors()) {
+            coAuthors.addItem(author.getComboItem());
+        }
+
+        czrc.getScopesSortedByRecentUsage(VfsUtil.virtualToIoFile(project.getBaseDir()))
+                .forEach(scopes::addItem);
     }
 
     JPanel getMainPanel() {
@@ -52,9 +53,10 @@ public class Panel {
     }
 
     @NotNull
-    private ArrayList<ChangeType> getTypes() {
-        ArrayList<ChangeType> types = new ArrayList<>();
-        types.add((ChangeType) this.types.getSelectedItem());
+    private ArrayList<Type> getTypes() {
+        ArrayList<Type> types = new ArrayList<>();
+        TypeComboItem typeComboItem = (TypeComboItem) this.types.getSelectedItem();
+        types.add((Type) typeComboItem.getValue());
         return types;
     }
 
@@ -66,9 +68,10 @@ public class Panel {
     }
 
     @NotNull
-    private ArrayList<String> getIssues() {
-        ArrayList<String> issues = new ArrayList<>();
-        issues.add(this.issues.getText().trim());
+    private ArrayList<Issue> getIssues() {
+        ArrayList<Issue> issues = new ArrayList<>();
+        //issues.add(((String)this.issues.getSelectedItem()).trim());
+        issues.add(new Issue(new IssueTracker("JIRA"), "S-123"));
         return issues;
     }
 
@@ -80,10 +83,10 @@ public class Panel {
     }
 
     @NotNull
-    private ArrayList<String> getCoAuthors() {
-        ArrayList<String> coAuthors = new ArrayList<>();
-        coAuthors.add(this.coAuthors.getText().trim());
+    private ArrayList<Author> getCoAuthors() {
+        ArrayList<Author> coAuthors = new ArrayList<>();
+        AuthorComboItem authorComboItem = (AuthorComboItem) this.coAuthors.getSelectedItem();
+        coAuthors.add((Author) authorComboItem.getValue());
         return coAuthors;
     }
-
 }

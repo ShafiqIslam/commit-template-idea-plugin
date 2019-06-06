@@ -1,6 +1,9 @@
 package xyz.sheba.developers.commit_template;
 
 import org.apache.commons.lang.WordUtils;
+import xyz.sheba.developers.commit_template.dto.Issue;
+import xyz.sheba.developers.commit_template.dto.Type;
+import xyz.sheba.developers.commit_template.dto.Author;
 
 import java.util.ArrayList;
 
@@ -10,12 +13,12 @@ class Message {
     private static final int MAX_LINE_LENGTH = 72;
 
     private String subject;
-    private ArrayList types;
+    private ArrayList<Type> types;
     private ArrayList<String> scopes;
     private String what;
     private String why;
-    private ArrayList issues;
-    private ArrayList coAuthors;
+    private ArrayList<Issue> issues;
+    private ArrayList<Author> coAuthors;
     private ArrayList<String> references;
 
     private Message(Builder builder) {
@@ -67,12 +70,12 @@ class Message {
 
     static class Builder {
         private String subject;
-        private ArrayList types;
+        private ArrayList<Type> types;
         private ArrayList<String> scopes;
         private String what;
         private String why;
-        private ArrayList issues;
-        private ArrayList coAuthors;
+        private ArrayList<Issue> issues;
+        private ArrayList<Author> coAuthors;
         private ArrayList<String> references;
 
         private Builder() {}
@@ -87,7 +90,7 @@ class Message {
             return this;
         }
 
-        Builder setTypes(ArrayList types) {
+        Builder setTypes(ArrayList<Type> types) {
             this.types = types;
             return this;
         }
@@ -107,12 +110,12 @@ class Message {
             return this;
         }
 
-        Builder setIssues(ArrayList issues) {
+        Builder setIssues(ArrayList<Issue> issues) {
             this.issues = issues;
             return this;
         }
 
-        Builder setCoAuthors(ArrayList coAuthors) {
+        Builder setCoAuthors(ArrayList<Author> coAuthors) {
             this.coAuthors = coAuthors;
             return this;
         }

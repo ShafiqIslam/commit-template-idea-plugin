@@ -1,4 +1,4 @@
-package xyz.sheba.developers.commit_template;
+package xyz.sheba.developers.commit_template.utils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,16 +7,16 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-class Command {
+public class Command {
     private final File workingDirectory;
     private final String command;
 
-    Command(File workingDirectory, String command) {
+    public Command(File workingDirectory, String command) {
         this.workingDirectory = workingDirectory;
         this.command = command;
     }
 
-    static class Result {
+    public static class Result {
         static Result ERROR = new Result(-1);
 
         private final int exitValue;
@@ -32,16 +32,16 @@ class Command {
             this.output = output;
         }
 
-        boolean isSuccess() {
+        public boolean isSuccess() {
             return exitValue == 0;
         }
 
-        List<String> getOutput() {
+        public List<String> getOutput() {
             return output;
         }
     }
 
-    Result execute() {
+    public Result execute() {
         try {
             Process process = new ProcessBuilder("/bin/sh", "-c", this.command)
                     .directory(workingDirectory)

@@ -3,11 +3,13 @@ package xyz.sheba.developers.commit_template.dto;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.io.File;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import xyz.sheba.developers.commit_template.utils.Command;
 
 public class CZRC {
     private static CZRC czrc = null;
@@ -20,11 +22,8 @@ public class CZRC {
     private ArrayList<Author> authors;
     private ArrayList<IssueTracker> issueTrackers;
     private ArrayList<String> scopes;
-
-    /*public static void main(String[] args) throws IOException, ParseException {
-        CZRC czrc = CZRC.load("E:\\Works\\Khucra\\commit-template");
-        System.out.println(czrc.getScopes().get(0));
-    }*/
+    private int typesMaxNameLength = 0;
+    private int typesMaxEmojiLength = 0;
 
     public static CZRC load(String projectPath) throws IOException, ParseException {
         if(czrc != null) return czrc;
@@ -32,10 +31,20 @@ public class CZRC {
         JSONParser jsonParser = new JSONParser();
         FileReader reader = new FileReader(System.getProperty("user.home") + "/.czrc.json");
         JSONObject systemRc = (JSONObject) jsonParser.parse(reader);
-        reader = new FileReader(projectPath + "/.czrc.json");
-        JSONObject localRc = (JSONObject) jsonParser.parse(reader);
-        systemRc.put("scopes", localRc.get("scopes"));
-        return new CZRC(systemRc);
+        try {
+            reader = new FileReader(projectPath + "/.czrc.json");
+            JSONObject localRc = (JSONObject) jsonParser.parse(reader);
+            systemRc.put("scopes", localRc.get("scopes"));
+        } catch (Exception e) {}
+
+        czrc = new CZRC(systemRc);
+        return czrc;
+    }
+
+    public static CZRC get() throws Exception {
+        if(czrc != null) return czrc;
+
+        throw new Exception("Czrc is not loaded.");
     }
 
     public int getSubjectMaxLength() {
@@ -62,10 +71,27 @@ public class CZRC {
         return scopes;
     }
 
+    public ArrayList<String> getScopesSortedByRecentUsage(File workingDirectory) {
+        return scopes;
+        /*Command.Result result = new Command(workingDirectory, "git log --all --format=%s | grep -Eo '^[a-z]+(\\(.*\\)):.*$' | sed 's/^.*(\\(.*\\)):.*$/\\1/' | sort -n | uniq").execute();
+        if (result.isSuccess()) {
+            return scopes;
+        }*/
+    }
+
+    public int getTypesMaxNameLength() {
+        return typesMaxNameLength;
+    }
+
+    public int getTypesMaxEmojiLength() {
+        return typesMaxEmojiLength;
+    }
+
     private CZRC(JSONObject source) {
         this.source = source;
         this.setBodyMaxLength().setSubjectMaxLength().setTypes()
-                .setAuthors().setIssueTrackers().setScopes();
+                .setAuthors().setIssueTrackers().setScopes()
+                .setTypeLengths();
     }
 
     private CZRC setSubjectMaxLength() {
@@ -114,7 +140,15 @@ public class CZRC {
     private CZRC setScopes() {
         JSONArray scopesRaw = (JSONArray)this.source.get("scopes");
         scopes = new ArrayList<>();
-        scopesRaw.forEach(scope -> scopes.add((String) scope));
+        if(scopesRaw != null) scopesRaw.forEach(scope -> scopes.add((String) scope));
+        return this;
+    }
+
+    private CZRC setTypeLengths() {
+        for (Type type : types) {
+            typesMaxNameLength = Math.max(type.getName().length(), typesMaxNameLength);
+            typesMaxEmojiLength = Math.max(type.getEmoji().length(), typesMaxEmojiLength);
+        }
         return this;
     }
 }
