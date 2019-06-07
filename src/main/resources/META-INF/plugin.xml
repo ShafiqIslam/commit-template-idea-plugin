@@ -22,7 +22,7 @@
     </extensions>
 
     <actions>
-        <action id="Commit.Button" class="xyz.sheba.commit_template.Action"
+        <action id="Commit.Button" class="xyz.sheba.commit_template.ui.Action"
                 text="Create commit message"
                 description="Create commit message"
                 icon="PluginIcons.LOAD">

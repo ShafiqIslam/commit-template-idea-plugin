@@ -1,7 +1,8 @@
-package xyz.sheba.commit_template;
+package xyz.sheba.commit_template.ui;
 
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
+import xyz.sheba.commit_template.dto.Message;
 import xyz.sheba.commit_template.dto.*;
 
 import javax.swing.*;
@@ -20,7 +21,7 @@ public class Panel {
     private JTextField issueId;
 
     Panel(Project project) throws Exception {
-        CZRC czrc = CZRCLoader.load(project);
+        CZRC czrc = CZRC.Loader.load(project);
         czrc.getTypes().forEach(types::addItem);
         czrc.getAuthors().forEach(coAuthors::addItem);
         czrc.getIssueTrackers().forEach(issueTrackers::addItem);

@@ -1,8 +1,9 @@
-package xyz.sheba.commit_template;
+package xyz.sheba.commit_template.ui;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import org.jetbrains.annotations.Nullable;
+import xyz.sheba.commit_template.dto.Message;
 
 import javax.swing.*;
 
@@ -10,7 +11,7 @@ public class Dialog extends DialogWrapper {
 
     private final Panel panel;
 
-    Dialog(@Nullable Project project) throws Exception {
+    public Dialog(@Nullable Project project) throws Exception {
         super(project);
         panel = new Panel(project);
         setTitle("Commit");
@@ -24,7 +25,7 @@ public class Dialog extends DialogWrapper {
         return panel.getMainPanel();
     }
 
-    Message getCommitMessage() {
+    public Message getCommitMessage() {
         return panel.getCommitMessage();
     }
 }

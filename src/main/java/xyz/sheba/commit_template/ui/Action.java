@@ -1,4 +1,4 @@
-package xyz.sheba.commit_template;
+package xyz.sheba.commit_template.ui;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
