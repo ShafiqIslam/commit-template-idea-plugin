@@ -4,11 +4,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import com.intellij.openapi.project.Project;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import xyz.sheba.commit_template.project.IProject;
 
 public class CZRC {
 
@@ -49,7 +49,7 @@ public class CZRC {
 
         private static CZRC czrc = null;
 
-        public static CZRC load(Project project) throws IOException, ParseException {
+        public static CZRC load(IProject project) throws IOException, ParseException {
             if(czrc != null) return czrc;
 
             JSONParser jsonParser = new JSONParser();
@@ -61,12 +61,11 @@ public class CZRC {
 
                 JSONArray scopes = (JSONArray) localRc.get("scopes");
 
-            /*File workingDirectory = VfsUtil.virtualToIoFile(project.getBaseDir());
-            String recentLogCommand = "git log --all --format=%s | grep -Eo '^[a-z]+(\\(.*\\)):.*$' | sed 's/^.*(\\(.*\\)):.*$/\\1/' | sort -n | uniq";
-            Command.Result result = new Command(workingDirectory, recentLogCommand).execute();
-            if (result.isSuccess()) {
-                scopes.sort((o1, o2) -> result.compare(o1.toString(), o2.toString()));
-            }*/
+                /*String recentLogCommand = "git log --all --format=%s | grep -Eo '^[a-z]+(\\(.*\\)):.*$' | sed 's/^.*(\\(.*\\)):.*$/\\1/' | sort -n | uniq";
+                Command.Result result = new Command(project.getBaseWorkingDir(), recentLogCommand).execute();
+                if (result.isSuccess()) {
+                    scopes.sort((o1, o2) -> result.compare(o1.toString(), o2.toString()));
+                }*/
 
                 rc.put("scopes", scopes);
             } catch (Exception ignored) {}

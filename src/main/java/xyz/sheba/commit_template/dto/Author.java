@@ -9,8 +9,13 @@ public class Author {
         this.email = email;
     }
 
+    public boolean isNotEmpty() {
+        return name != null;
+    }
+
     @Override
     public String toString() {
+        if(name == null) return "No One";
         return name + "<" + email + ">";
     }
 }

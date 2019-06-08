@@ -11,8 +11,12 @@ public class IssueTracker {
         return name;
     }
 
+    public boolean isNotEmpty() {
+        return name != null;
+    }
+
     @Override
     public String toString() {
-        return name;
+        return isNotEmpty() ? name : "None";
     }
 }

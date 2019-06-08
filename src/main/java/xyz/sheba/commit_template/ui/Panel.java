@@ -4,6 +4,8 @@ import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 import xyz.sheba.commit_template.dto.Message;
 import xyz.sheba.commit_template.dto.*;
+import xyz.sheba.commit_template.project.IntelliJProject;
+import xyz.sheba.commit_template.utils.StringUtils;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -21,8 +23,12 @@ public class Panel {
     private JTextField issueId;
 
     Panel(Project project) throws Exception {
-        CZRC czrc = CZRC.Loader.load(project);
+        IntelliJProject intelliJProject = new IntelliJProject(project);
+        CZRC czrc = CZRC.Loader.load(intelliJProject);
         czrc.getTypes().forEach(types::addItem);
+        scopes.addItem("None");
+        coAuthors.addItem(new Author(null, null));
+        issueTrackers.addItem(new IssueTracker(null));
         czrc.getAuthors().forEach(coAuthors::addItem);
         czrc.getIssueTrackers().forEach(issueTrackers::addItem);
         czrc.getScopes().forEach(scopes::addItem);
@@ -55,28 +61,32 @@ public class Panel {
     @NotNull
     private ArrayList<String> getScopes() {
         ArrayList<String> scopes = new ArrayList<>();
-        scopes.add((String) this.scopes.getSelectedItem());
+        String scope = (String) this.scopes.getSelectedItem();
+        if(!scope.equals("None")) scopes.add(scope);
         return scopes;
     }
 
     @NotNull
     private ArrayList<Issue> getIssueTrackers() {
         ArrayList<Issue> issues = new ArrayList<>();
-        issues.add(new Issue((IssueTracker) this.issueTrackers.getSelectedItem(), this.issueId.getText().trim()));
+        IssueTracker tracker = (IssueTracker) this.issueTrackers.getSelectedItem();
+        if(tracker.isNotEmpty()) issues.add(new Issue(tracker, this.issueId.getText().trim()));
         return issues;
     }
 
     @NotNull
     private ArrayList<String> getReferences() {
         ArrayList<String> references = new ArrayList<>();
-        references.add(this.references.getText().trim());
+        if (StringUtils.isNotBlank(this.references.getText().trim()))
+            references.add(this.references.getText().trim());
         return references;
     }
 
     @NotNull
     private ArrayList<Author> getCoAuthors() {
         ArrayList<Author> coAuthors = new ArrayList<>();
-        coAuthors.add((Author) this.coAuthors.getSelectedItem());
+        Author author = (Author) this.coAuthors.getSelectedItem();
+        if(author.isNotEmpty()) coAuthors.add(author);
         return coAuthors;
     }
 }

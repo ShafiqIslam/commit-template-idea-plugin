@@ -1,13 +1,10 @@
 package xyz.sheba.commit_template.dto;
 
 import org.apache.commons.lang.WordUtils;
-
+import xyz.sheba.commit_template.utils.StringUtils;
 import java.util.ArrayList;
 
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
-
 public class Message {
-
     private String subject;
     private ArrayList<Type> types;
     private ArrayList<String> scopes;
@@ -33,6 +30,7 @@ public class Message {
         try {
             return new Formatter().format();
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -67,6 +65,30 @@ public class Message {
 
     public ArrayList<String> getReferences() {
         return references;
+    }
+
+    public boolean hasScopes() {
+        return scopes != null && scopes.size() != 0;
+    }
+
+    public boolean hasWhat() {
+        return what != null && what.length() != 0;
+    }
+
+    public boolean hasWhy() {
+        return why != null && why.length() != 0;
+    }
+
+    public boolean hasIssues() {
+        return issues != null && issues.size() != 0;
+    }
+
+    public boolean hasReferences() {
+        return references != null && references.size() != 0;
+    }
+
+    public boolean hasCoAuthors() {
+        return coAuthors != null && coAuthors.size() != 0;
     }
 
     public static class Builder {
@@ -132,76 +154,107 @@ public class Message {
     }
 
     private class Formatter {
-        private StringBuilder builder;
         private CZRC czrc;
         private Message message;
 
         Formatter() throws Exception {
             message = Message.this;
-            builder = new StringBuilder();
             czrc = CZRC.Loader.get();
         }
 
         String format() {
             String ls = System.lineSeparator();
             String ls2 = ls + ls;
+            StringBuilder builder = new StringBuilder();
 
-            String subject = message.getSubject();
-            subject = subject.substring(0, Math.min(subject.length(), czrc.getSubjectMaxLength()));
-            builder.append(subject).append(ls2);
+            builder.append(formatSubject()).append(ls2);
 
-            builder.append("Type(s): ").append(message.getTypes().get(0)).append(ls2);
+            builder.append("Type(s): ").append(formatTypes()).append(ls2);
 
-            if (message.getScopes().size() != 0) {
-                builder.append("Scopes(s): ");
-                for (String scope : message.getScopes()) {
-                    if(isNotBlank(scope)) {
-                        builder.append(scope).append(", ");
-                    }
-                }
+            if (message.hasScopes()) {
+                builder.append("Scopes(s): ").append(formatScopes()).append(ls2);
             }
 
-            builder.append(ls2);
-
-            if(message.getWhy().length() != 0) {
-                builder.append("Why:").append(ls)
-                        .append(WordUtils.wrap(message.getWhy(), czrc.getBodyMaxLength()))
-                        .append(ls2);
+            if(message.hasWhy()) {
+                builder.append("Why:").append(ls).append(formatWhy()).append(ls2);
             }
 
-            if(message.getWhat().length() != 0) {
-                builder.append("What:").append(ls)
-                        .append(WordUtils.wrap(message.getWhat(), czrc.getBodyMaxLength()))
-                        .append(ls2);
+            if(message.hasWhat()) {
+                builder.append("What:").append(ls).append(formatWhat()).append(ls2);
             }
 
-            if (message.getIssues().size() != 0) {
-                builder.append("Issues:").append(ls);
-                for (Issue issue : message.getIssues()) {
-                    builder.append("- ").append(issue).append(ls);
-                }
-                builder.append(ls);
+            if (message.hasIssues()) {
+                builder.append("Issues:").append(ls).append(formatIssues()).append(ls);
             }
 
-            if (message.getReferences().size() != 0) {
-                builder.append("References:").append(ls);
-                for (String reference : message.getReferences()) {
-                    if(isNotBlank(reference)) {
-                        builder.append("- ").append(reference).append(ls);
-                    }
-                }
-                builder.append(ls);
+            if (message.hasReferences()) {
+                builder.append("References:").append(ls).append(formatReferences()).append(ls);
             }
 
-            if (message.getCoAuthors().size() != 0) {
-                builder.append("Co Authored By:").append(ls);
-                for (Author author : message.getCoAuthors()) {
-                    builder.append("- ").append(author).append(ls);
-                }
-                builder.append(ls);
+            if (message.hasCoAuthors()) {
+                builder.append("Co Authored By:").append(ls).append(formatCoAuthors()).append(ls);
             }
 
             return builder.toString().trim();
+        }
+
+        private String formatSubject() {
+            String subject = StringUtils.strip(message.getSubject(), ". ");
+            subject = StringUtils.capitalize(subject);
+            subject = message.getTypes().get(0).getEmoji() + " " + subject;
+            return StringUtils.truncate(subject, czrc.getSubjectMaxLength());
+        }
+
+        private String formatTypes() {
+            return message.getTypes().get(0).getName();
+        }
+
+        private String formatScopes() {
+            StringBuilder builder = new StringBuilder();
+            for (String scope : message.getScopes()) {
+                if(StringUtils.isNotBlank(scope)) {
+                    builder.append(scope).append(", ");
+                }
+            }
+
+            return wrapBody(StringUtils.strip(builder.toString(), ", "));
+        }
+
+        private String formatWhy() {
+            return wrapBody(message.getWhy());
+        }
+
+        private String formatWhat() {
+            return wrapBody(message.getWhat());
+        }
+
+        private String formatIssues() {
+            StringBuilder builder = new StringBuilder();
+            for (Issue issue : message.getIssues()) {
+                builder.append("- ").append(issue).append(System.lineSeparator());
+            }
+            return wrapBody(builder.toString());
+        }
+
+        private String formatReferences() {
+            StringBuilder builder = new StringBuilder();
+            for (String reference : message.getReferences()) {
+                if(StringUtils.isNotBlank(reference)) {
+                    builder.append("- ").append(reference).append(System.lineSeparator());
+                }
+            }
+            return wrapBody(builder.toString());
+        }
+        private String formatCoAuthors() {
+            StringBuilder builder = new StringBuilder();
+            for (Author author : message.getCoAuthors()) {
+                builder.append("- ").append(author).append(System.lineSeparator());
+            }
+            return builder.toString();
+        }
+
+        private String wrapBody(String body) {
+            return WordUtils.wrap(body, czrc.getBodyMaxLength());
         }
     }
 }

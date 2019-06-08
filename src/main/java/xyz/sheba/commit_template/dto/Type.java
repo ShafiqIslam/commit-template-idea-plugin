@@ -6,7 +6,7 @@ public class Type {
     private String description;
     private String code;
 
-    Type(String name, String emoji, String description, String code) {
+    public Type(String name, String emoji, String description, String code) {
         this.name = name;
         this.emoji = emoji;
         this.description = description;
