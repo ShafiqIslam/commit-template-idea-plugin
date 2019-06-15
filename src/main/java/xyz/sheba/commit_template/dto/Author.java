@@ -9,13 +9,20 @@ public class Author {
         this.email = email;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
     public boolean isNotEmpty() {
         return name != null;
     }
 
     @Override
     public String toString() {
-        if(name == null) return "No One";
-        return name + "<" + email + ">";
+        return (name != null) ? name : "No One";
     }
 }

@@ -1,11 +1,9 @@
 package xyz.sheba.commit_template;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.simple.parser.ParseException;
 import xyz.sheba.commit_template.dto.*;
 import xyz.sheba.commit_template.project.MockProject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class Test {
@@ -19,8 +17,8 @@ public class Test {
                 .setWhat("asfd")
                 .setWhy("sdfasdf")
                 .setIssues(getIssueTrackers())
-                //.setCoAuthors(getCoAuthors())
-                //.setReferences(getReferences())
+                .setCoAuthors(getCoAuthors())
+                .setReferences(getReferences())
                 .build();
 
         System.out.println(m);

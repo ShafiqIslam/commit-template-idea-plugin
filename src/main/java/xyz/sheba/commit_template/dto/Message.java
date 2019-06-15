@@ -1,6 +1,7 @@
 package xyz.sheba.commit_template.dto;
 
 import org.apache.commons.lang.WordUtils;
+import org.json.simple.JSONObject;
 import xyz.sheba.commit_template.utils.StringUtils;
 import java.util.ArrayList;
 
@@ -35,59 +36,59 @@ public class Message {
         }
     }
 
-    public String getSubject() {
+    private String getSubject() {
         return subject;
     }
 
-    public ArrayList<Type> getTypes() {
+    private ArrayList<Type> getTypes() {
         return types;
     }
 
-    public ArrayList<String> getScopes() {
+    private ArrayList<String> getScopes() {
         return scopes;
     }
 
-    public String getWhat() {
+    private String getWhat() {
         return what;
     }
 
-    public String getWhy() {
+    private String getWhy() {
         return why;
     }
 
-    public ArrayList<Issue> getIssues() {
+    private ArrayList<Issue> getIssues() {
         return issues;
     }
 
-    public ArrayList<Author> getCoAuthors() {
+    private ArrayList<Author> getCoAuthors() {
         return coAuthors;
     }
 
-    public ArrayList<String> getReferences() {
+    private ArrayList<String> getReferences() {
         return references;
     }
 
-    public boolean hasScopes() {
+    private boolean hasScopes() {
         return scopes != null && scopes.size() != 0;
     }
 
-    public boolean hasWhat() {
+    private boolean hasWhat() {
         return what != null && what.length() != 0;
     }
 
-    public boolean hasWhy() {
+    private boolean hasWhy() {
         return why != null && why.length() != 0;
     }
 
-    public boolean hasIssues() {
+    private boolean hasIssues() {
         return issues != null && issues.size() != 0;
     }
 
-    public boolean hasReferences() {
+    private boolean hasReferences() {
         return references != null && references.size() != 0;
     }
 
-    public boolean hasCoAuthors() {
+    private boolean hasCoAuthors() {
         return coAuthors != null && coAuthors.size() != 0;
     }
 
@@ -155,44 +156,47 @@ public class Message {
 
     private class Formatter {
         private CZRC czrc;
+        private JSONObject headers;
         private Message message;
 
         Formatter() throws Exception {
             message = Message.this;
             czrc = CZRC.Loader.get();
+            headers = czrc.getSectionHeaders();
         }
 
         String format() {
+            System.out.println();
             String ls = System.lineSeparator();
             String ls2 = ls + ls;
             StringBuilder builder = new StringBuilder();
 
             builder.append(formatSubject()).append(ls2);
 
-            builder.append("Type(s): ").append(formatTypes()).append(ls2);
+            builder.append(headers.get("types")).append(formatTypes()).append(ls2);
 
             if (message.hasScopes()) {
-                builder.append("Scopes(s): ").append(formatScopes()).append(ls2);
+                builder.append(headers.get("scopes")).append(formatScopes()).append(ls2);
             }
 
             if(message.hasWhy()) {
-                builder.append("Why:").append(ls).append(formatWhy()).append(ls2);
+                builder.append(headers.get("why")).append(formatWhy()).append(ls2);
             }
 
             if(message.hasWhat()) {
-                builder.append("What:").append(ls).append(formatWhat()).append(ls2);
+                builder.append(headers.get("what")).append(formatWhat()).append(ls2);
             }
 
             if (message.hasIssues()) {
-                builder.append("Issues:").append(ls).append(formatIssues()).append(ls);
+                builder.append(headers.get("issues")).append(formatIssues()).append(ls);
             }
 
             if (message.hasReferences()) {
-                builder.append("References:").append(ls).append(formatReferences()).append(ls);
+                builder.append(headers.get("references")).append(formatReferences()).append(ls);
             }
 
             if (message.hasCoAuthors()) {
-                builder.append("Co Authored By:").append(ls).append(formatCoAuthors()).append(ls);
+                builder.append(headers.get("co_authors")).append(formatCoAuthors()).append(ls);
             }
 
             return builder.toString().trim();
@@ -213,11 +217,11 @@ public class Message {
             StringBuilder builder = new StringBuilder();
             for (String scope : message.getScopes()) {
                 if(StringUtils.isNotBlank(scope)) {
-                    builder.append(scope).append(", ");
+                    builder.append(scope).append(czrc.getInlineSeparator());
                 }
             }
 
-            return wrapBody(StringUtils.strip(builder.toString(), ", "));
+            return wrapBody(StringUtils.strip(builder.toString(), czrc.getInlineSeparator()));
         }
 
         private String formatWhy() {
@@ -231,7 +235,11 @@ public class Message {
         private String formatIssues() {
             StringBuilder builder = new StringBuilder();
             for (Issue issue : message.getIssues()) {
-                builder.append("- ").append(issue).append(System.lineSeparator());
+                builder.append(czrc.getBullet())
+                        .append(issue.getTracker().getName())
+                        .append(czrc.getIssueTrackerIdSeparator())
+                        .append(issue.getId())
+                        .append(System.lineSeparator());
             }
             return wrapBody(builder.toString());
         }
@@ -240,7 +248,7 @@ public class Message {
             StringBuilder builder = new StringBuilder();
             for (String reference : message.getReferences()) {
                 if(StringUtils.isNotBlank(reference)) {
-                    builder.append("- ").append(reference).append(System.lineSeparator());
+                    builder.append(czrc.getBullet()).append(reference).append(System.lineSeparator());
                 }
             }
             return wrapBody(builder.toString());
@@ -248,7 +256,12 @@ public class Message {
         private String formatCoAuthors() {
             StringBuilder builder = new StringBuilder();
             for (Author author : message.getCoAuthors()) {
-                builder.append("- ").append(author).append(System.lineSeparator());
+                builder.append(czrc.getBullet())
+                        .append(author.getName())
+                        .append(czrc.getAuthorEmailTags().get("start"))
+                        .append(author.getEmail())
+                        .append(czrc.getAuthorEmailTags().get("end"))
+                        .append(System.lineSeparator());
             }
             return builder.toString();
         }

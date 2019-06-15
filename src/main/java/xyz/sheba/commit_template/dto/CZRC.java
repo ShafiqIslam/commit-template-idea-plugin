@@ -20,12 +20,17 @@ public class CZRC {
     private ArrayList<Author> authors;
     private ArrayList<IssueTracker> issueTrackers;
     private ArrayList<String> scopes;
+    private JSONObject sectionHeaders;
+    private String inlineSeparator;
+    private String bullet;
+    private String issueTrackerIdSeparator;
+    private JSONObject authorEmailTags;
 
-    public int getSubjectMaxLength() {
+    int getSubjectMaxLength() {
         return subjectMaxLength;
     }
 
-    public int getBodyMaxLength() {
+    int getBodyMaxLength() {
         return bodyMaxLength;
     }
 
@@ -43,6 +48,26 @@ public class CZRC {
 
     public ArrayList<String> getScopes() {
         return scopes;
+    }
+
+    JSONObject getSectionHeaders() {
+        return sectionHeaders;
+    }
+
+    String getInlineSeparator() {
+        return inlineSeparator;
+    }
+
+    String getBullet() {
+        return bullet;
+    }
+
+    String getIssueTrackerIdSeparator() {
+        return issueTrackerIdSeparator;
+    }
+
+    JSONObject getAuthorEmailTags() {
+        return authorEmailTags;
     }
 
     public static class Loader {
@@ -74,7 +99,7 @@ public class CZRC {
             return czrc;
         }
 
-        public static CZRC get() throws Exception {
+        static CZRC get() throws Exception {
             if(czrc != null) return czrc;
 
             throw new Exception("Czrc is not loaded.");
@@ -83,8 +108,9 @@ public class CZRC {
 
     private CZRC(JSONObject source) {
         this.source = source;
-        this.setBodyMaxLength().setSubjectMaxLength().setTypes()
-                .setAuthors().setIssueTrackers().setScopes();
+        this.setBodyMaxLength().setSubjectMaxLength().setTypes().setAuthors()
+                .setIssueTrackers().setScopes().setHeaders().setInlineSeparator()
+                .setBullet().setIssueTrackerIdSeparator().setAuthorEmailTags();
     }
 
     private CZRC setSubjectMaxLength() {
@@ -134,6 +160,31 @@ public class CZRC {
         JSONArray scopesRaw = (JSONArray)this.source.get("scopes");
         scopes = new ArrayList<>();
         if(scopesRaw != null) scopesRaw.forEach(scope -> scopes.add((String) scope));
+        return this;
+    }
+
+    private CZRC setHeaders() {
+        this.sectionHeaders = (JSONObject) this.source.get("section_headers");
+        return this;
+    }
+
+    private CZRC setInlineSeparator() {
+        this.inlineSeparator = (String)this.source.get("inline_separator");
+        return this;
+    }
+
+    private CZRC setBullet() {
+        this.bullet = (String)this.source.get("bullet");
+        return this;
+    }
+
+    private CZRC setIssueTrackerIdSeparator() {
+        this.issueTrackerIdSeparator = (String)this.source.get("issue_tracker_id_separator");
+        return this;
+    }
+
+    private CZRC setAuthorEmailTags() {
+        this.authorEmailTags = (JSONObject) this.source.get("author_email_tag");
         return this;
     }
 }

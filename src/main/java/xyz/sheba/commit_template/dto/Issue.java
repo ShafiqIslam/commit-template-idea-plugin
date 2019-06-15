@@ -9,6 +9,14 @@ public class Issue {
         this.id = id;
     }
 
+    IssueTracker getTracker() {
+        return tracker;
+    }
+
+    String getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return tracker.getName() + ": " + id;
