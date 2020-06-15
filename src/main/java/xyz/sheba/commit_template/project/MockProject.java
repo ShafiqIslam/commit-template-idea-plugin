@@ -1,7 +1,5 @@
 package xyz.sheba.commit_template.project;
 
-import java.io.File;
-
 public class MockProject implements IProject {
     String path;
 
@@ -12,10 +10,5 @@ public class MockProject implements IProject {
     @Override
     public String getBasePath() {
         return path;
-    }
-
-    @Override
-    public File getBaseWorkingDir() {
-        return new File(path);
     }
 }

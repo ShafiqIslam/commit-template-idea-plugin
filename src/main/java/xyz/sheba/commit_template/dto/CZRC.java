@@ -80,18 +80,11 @@ public class CZRC {
             JSONParser jsonParser = new JSONParser();
             FileReader reader = new FileReader(System.getProperty("user.home") + "/.czrc.json");
             JSONObject rc = (JSONObject) jsonParser.parse(reader);
+
             try {
                 reader = new FileReader(project.getBasePath() + "/.czrc.json");
                 JSONObject localRc = (JSONObject) jsonParser.parse(reader);
-
                 JSONArray scopes = (JSONArray) localRc.get("scopes");
-
-                /*String recentLogCommand = "git log --all --format=%s | grep -Eo '^[a-z]+(\\(.*\\)):.*$' | sed 's/^.*(\\(.*\\)):.*$/\\1/' | sort -n | uniq";
-                Command.Result result = new Command(project.getBaseWorkingDir(), recentLogCommand).execute();
-                if (result.isSuccess()) {
-                    scopes.sort((o1, o2) -> result.compare(o1.toString(), o2.toString()));
-                }*/
-
                 rc.put("scopes", scopes);
             } catch (Exception ignored) {}
 

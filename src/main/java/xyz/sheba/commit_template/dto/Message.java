@@ -253,6 +253,7 @@ public class Message {
             }
             return wrapBody(builder.toString());
         }
+
         private String formatCoAuthors() {
             StringBuilder builder = new StringBuilder();
             for (Author author : message.getCoAuthors()) {

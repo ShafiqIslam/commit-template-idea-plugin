@@ -2,6 +2,7 @@ package xyz.sheba.commit_template;
 
 import org.jetbrains.annotations.NotNull;
 import xyz.sheba.commit_template.dto.*;
+import xyz.sheba.commit_template.project.IProject;
 import xyz.sheba.commit_template.project.MockProject;
 
 import java.util.ArrayList;
@@ -9,8 +10,9 @@ import java.util.ArrayList;
 public class Test {
 
     public static void main(String[] args) throws Exception {
-        CZRC.Loader.load(new MockProject("E:\\Works\\Khucra\\commit-template"));
-        Message m = Message.Builder.getInstance()
+        IProject project = new MockProject("/home/shafiq/workspace/commit-template-idea-plugin"); //"E:\\Works\\Khucra\\commit-template"
+        CZRC czrc = CZRC.Loader.load(project);
+        /*Message m = Message.Builder.getInstance()
                 .setSubject("sdfsdaf dfgdf g dfg. . .. ")
                 .setTypes(getTypes())
                 .setScopes(getScopes())
@@ -19,9 +21,9 @@ public class Test {
                 .setIssues(getIssueTrackers())
                 .setCoAuthors(getCoAuthors())
                 .setReferences(getReferences())
-                .build();
+                .build();*/
 
-        System.out.println(m);
+        System.out.println(czrc.getTypes().get(0).getEmoji());
     }
 
     @NotNull
